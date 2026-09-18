@@ -1,0 +1,423 @@
+---
+title: Research
+permalink: /research/
+---
+<section class="page">
+  <div class="wrap">
+    <h1 class="page-title">Research</h1>
+
+    <article class="topic">
+      <h3>Chromatin architecture</h3>
+      <p>
+        Software for the analysis, visualization, and prediction of 3D genome structure. Much of the
+        analysis work is described in the doctoral thesis
+        <a href="{{ '/assets/theses/Wolff_2022_doctoral_thesis.pdf' | relative_url }}">Approaches to analysis of chromosome conformation capture data</a>
+        (University of Freiburg, 2022).
+      </p>
+
+    <div class="prose">
+      <h4 class="sub">Why chromatin architecture matters</h4>
+      <p>
+        A human cell packs about two meters of DNA into a nucleus a few micrometers across.
+        The folding is not random. Chromosomes separate into active and inactive compartments,
+        these are subdivided into topologically associating domains (TADs) of some hundred kilobases,
+        and within the domains loops bring distant elements into contact, typically anchored by CTCF and cohesin.
+      </p>
+      <p>
+        This structure is part of gene regulation. An enhancer can only act on a promoter it physically
+        meets, and domain boundaries limit which promoters that can be. When a boundary is lost or a
+        rearrangement moves an enhancer into another domain, genes can be switched on in the wrong
+        context. A known example from hematology is acute myeloid leukemia with inv(3) or t(3;3), where
+        a <i>GATA2</i> enhancer is relocated and activates the oncogene <i>MECOM</i> (<i>EVI1</i>).
+        The linear sequence alone does not show such effects, the 3D structure does.
+      </p>
+      <p>
+        Hi-C measures this structure. Pairs of DNA fragments that are close in the nucleus are ligated
+        and sequenced, and the counts are collected in an interaction matrix: the genome is cut into
+        bins of, for example, 10 kb, and entry (i, j) is the number of contacts observed between bin i and bin j.
+      </p>
+    </div>
+
+    <h4 class="sub">HiCExplorer</h4>
+    <div class="prose">
+      <p>
+        <a href="https://github.com/deeptools/HiCExplorer">HiCExplorer</a> covers the path from mapped
+        reads to interpretable results: building and correcting the interaction matrix, quality control,
+        detection of compartments, TADs, and loops, comparison of samples, capture Hi-C analysis, and plotting.
+        It runs on the command line and in Galaxy.
+      </p>
+    </div>
+
+    <div class="figure-row">
+      <figure>
+        <img src="{{ '/assets/img/hic-genome-wide.png' | relative_url }}" alt="Genome-wide Hi-C interaction matrix of Drosophila melanogaster with one bright square per chromosome arm along the diagonal" loading="lazy">
+        <figcaption>
+          A genome-wide interaction matrix (<i>D. melanogaster</i>). Both axes are the genome, color is
+          the contact count on a log scale. Most contacts lie within a chromosome arm, which gives the squares along the diagonal.
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="{{ '/assets/img/hic-loops.png' | relative_url }}" alt="Four megabase region of a Hi-C matrix with detected loops marked as small squares away from the diagonal" loading="lazy">
+        <figcaption>
+          A 4 Mb region at high resolution. The squares along the diagonal are domains. The marked points
+          away from the diagonal are loops found by the loop detection of HiCExplorer: two loci with
+          more contacts than their genomic distance explains.
+        </figcaption>
+      </figure>
+    </div>
+    <figure>
+      <img src="{{ '/assets/img/hic-tads-track.png' | relative_url }}" alt="Hi-C matrix rotated by 45 degrees with called TADs drawn as triangles above a ChIP-seq signal track" loading="lazy">
+      <figcaption>
+        The matrix rotated by 45 degrees, so that the diagonal lies flat and domains appear as triangles,
+        with the called TADs outlined and a ChIP-seq track below. Plotted with pyGenomeTracks. In this view
+        structure can be compared directly with one-dimensional signals such as histone marks or CTCF binding.
+      </figcaption>
+    </figure>
+
+    <h4 class="sub">pyGenomeTracks</h4>
+    <div class="prose">
+      <p>
+        <a href="https://github.com/deeptools/pyGenomeTracks">pyGenomeTracks</a> draws genome browser
+        style figures from a configuration file: Hi-C matrices, TADs, loops, bigwig signals, and gene
+        annotations as stacked tracks over the same region. The figure above and the prediction figure
+        below were made with it. Because the plot is defined in a text file, it can be reproduced
+        and rerun for other regions or samples.
+      </p>
+    </div>
+
+    <h4 class="sub">scHiCExplorer: single-cell Hi-C and MinHash clustering</h4>
+    <div class="prose">
+      <p>
+        Bulk Hi-C averages over millions of cells. Single-cell Hi-C gives one matrix per cell, which
+        makes it possible to group cells by how their chromatin is folded, for example by cell cycle
+        stage or cell type. The difficulty is the data: a single cell yields few contacts, so each matrix
+        is almost empty, and to cluster the cells every matrix is flattened into one row of a cells-by-bin-pairs
+        matrix. At 10 kb resolution this matrix has up to billions of columns, and computing all pairwise
+        distances between cells is not feasible in memory.
+      </p>
+      <p>
+        The approach in <a href="https://github.com/joachimwolff/scHiCExplorer">scHiCExplorer</a>
+        (<a href="https://doi.org/10.1093/bioinformatics/btab394">Wolff et al., Bioinformatics 2021</a>)
+        avoids the full distance computation with MinHash, a locality-sensitive hashing technique. Each cell
+        is treated as the set of its non-empty bin pairs. A hash function assigns every bin pair a
+        number, and only the smallest number per cell is kept. Repeating this with many different hash
+        functions gives each cell a short signature. The probability that two cells agree in one
+        signature position equals the Jaccard similarity of their contact sets, so cells with similar
+        folding collide often and unrelated cells rarely. Collisions are counted to find the likely
+        nearest neighbors of each cell, only these candidates are compared exactly, and the resulting
+        approximate k-nearest-neighbor graph is clustered with spectral clustering.
+      </p>
+    </div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 760 170" role="img" aria-label="MinHash clustering pipeline: single-cell matrices are flattened to sparse contact sets, hashed to short signatures, turned into an approximate nearest neighbor graph and clustered">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="d-arrowhead"/></marker>
+        </defs>
+        <!-- cells -->
+        <g class="d-box"><rect x="4" y="30" width="120" height="96" rx="6"/></g>
+        <g class="d-cell">
+          <rect x="18" y="44" width="34" height="34"/><rect x="40" y="58" width="34" height="34"/><rect x="62" y="72" width="34" height="34"/>
+        </g>
+        <g class="d-dot"><circle cx="26" cy="52" r="2"/><circle cx="44" cy="70" r="2"/><circle cx="52" cy="64" r="2"/><circle cx="66" cy="84" r="2"/><circle cx="80" cy="96" r="2"/><circle cx="88" cy="80" r="2"/><circle cx="72" cy="100" r="2"/></g>
+        <text x="64" y="146" class="d-label" text-anchor="middle">one sparse matrix</text>
+        <text x="64" y="161" class="d-label" text-anchor="middle">per cell</text>
+
+        <line x1="130" y1="78" x2="160" y2="78" class="d-arrow" marker-end="url(#ah)"/>
+
+        <g class="d-box"><rect x="166" y="30" width="130" height="96" rx="6"/></g>
+        <g class="d-mono">
+          <text x="178" y="56">c1: {3, 17, 42, ..}</text>
+          <text x="178" y="80">c2: {3, 18, 42, ..}</text>
+          <text x="178" y="104">c3: {7, 51, 90, ..}</text>
+        </g>
+        <text x="231" y="146" class="d-label" text-anchor="middle">set of non-empty</text>
+        <text x="231" y="161" class="d-label" text-anchor="middle">bin pairs</text>
+
+        <line x1="302" y1="78" x2="332" y2="78" class="d-arrow" marker-end="url(#ah)"/>
+
+        <g class="d-box d-accent"><rect x="338" y="30" width="120" height="96" rx="6"/></g>
+        <g class="d-mono">
+          <text x="350" y="56">[12, 4, 88, 31]</text>
+          <text x="350" y="80">[12, 4, 90, 31]</text>
+          <text x="350" y="104">[55, 9, 17, 60]</text>
+        </g>
+        <text x="398" y="146" class="d-label" text-anchor="middle">MinHash signatures,</text>
+        <text x="398" y="161" class="d-label" text-anchor="middle">similar cells collide</text>
+
+        <line x1="464" y1="78" x2="494" y2="78" class="d-arrow" marker-end="url(#ah)"/>
+
+        <g class="d-box"><rect x="500" y="30" width="110" height="96" rx="6"/></g>
+        <g class="d-edge"><line x1="522" y1="56" x2="548" y2="50"/><line x1="522" y1="56" x2="536" y2="80"/><line x1="548" y1="50" x2="536" y2="80"/><line x1="572" y1="98" x2="594" y2="84"/><line x1="572" y1="98" x2="590" y2="112"/><line x1="594" y1="84" x2="590" y2="112"/><line x1="536" y1="80" x2="572" y2="98"/></g>
+        <g class="d-node"><circle cx="522" cy="56" r="5"/><circle cx="548" cy="50" r="5"/><circle cx="536" cy="80" r="5"/><circle cx="572" cy="98" r="5"/><circle cx="594" cy="84" r="5"/><circle cx="590" cy="112" r="5"/></g>
+        <text x="555" y="146" class="d-label" text-anchor="middle">approximate</text>
+        <text x="555" y="161" class="d-label" text-anchor="middle">kNN graph</text>
+
+        <line x1="616" y1="78" x2="646" y2="78" class="d-arrow" marker-end="url(#ah)"/>
+
+        <g class="d-box"><rect x="652" y="30" width="104" height="96" rx="6"/></g>
+        <g class="d-node"><circle cx="676" cy="58" r="5"/><circle cx="694" cy="52" r="5"/><circle cx="686" cy="74" r="5"/></g>
+        <g class="d-node2"><circle cx="720" cy="96" r="5"/><circle cx="738" cy="86" r="5"/><circle cx="734" cy="110" r="5"/></g>
+        <text x="704" y="146" class="d-label" text-anchor="middle">spectral</text>
+        <text x="704" y="161" class="d-label" text-anchor="middle">clustering</text>
+      </svg>
+      <figcaption>
+        The clustering pipeline. Hashing replaces the comparison of all cells in the full feature space,
+        which is what makes high resolutions computable.
+      </figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>
+        On a dataset of 2600 cells at 10 kb resolution the method needed 40 GB of memory, while the
+        approaches it was compared with could not be computed with 1 TB, and the clusters compared favorably in how well
+        they separated the cells by their folding. The nearest neighbor search goes back to the master thesis
+        <a href="{{ '/assets/theses/Wolff_2016_master_thesis.pdf' | relative_url }}">Approximate nearest neighbor query methods for large-scale structured datasets</a> (University of Freiburg, 2016) and is available on its own as
+        <a href="https://github.com/joachimwolff/sparse-neighbors-search">sparse-neighbors-search</a>,
+        and the companion <a href="https://doi.org/10.1093/bioinformatics/btaa924">scool format</a>
+        stores thousands of single-cell matrices in one file.
+      </p>
+    </div>
+
+    <h4 class="sub">Hi-cGAN: predicting Hi-C matrices</h4>
+    <div class="prose">
+      <p>
+        Hi-C is expensive and needs many cells, so for most cell types and for patient samples no
+        matrix exists, while ChIP-seq tracks of histone marks and architectural proteins often do.
+        Since domains and loops are tied to these factors, a part of the matrix should be predictable from them.
+      </p>
+      <p>
+        <a href="https://github.com/joachimwolff/Hi-cGAN">Hi-cGAN</a>
+        (<a href="https://doi.org/10.64898/2026.08.30.748103">Krauth et al., preprint 2026</a>) treats this
+        as an image-to-image translation problem and uses a conditional generative adversarial network
+        in the style of pix2pix. A window slides along the chromosome. For each window the binned
+        ChIP-seq tracks are embedded into a two-dimensional image, and a convolutional generator
+        translates it into the contact submatrix of that window. During training a second network, the
+        discriminator, receives the tracks together with either the measured or the generated submatrix
+        and learns to tell them apart. The generator is trained to fool the discriminator and at the same
+        time to stay close to the measured values, which pushes it towards matrices that are both
+        accurate and look like real Hi-C data instead of a blurred average. For prediction only the
+        generator is needed: the windows are predicted along each chromosome and combined into a
+        whole-genome matrix in cool format, at bin sizes between 2 and 25 kb. DNA sequence is not used.
+      </p>
+    </div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 760 250" role="img" aria-label="Hi-cGAN: ChIP-seq tracks of a window are embedded and translated by a generator into a predicted contact matrix. A discriminator compares predicted and measured matrices given the tracks, and its feedback trains the generator.">
+        <!-- tracks -->
+        <g class="d-box"><rect x="4" y="40" width="150" height="100" rx="6"/></g>
+        <path class="d-track1" d="M14 78 h12 l4 -14 l4 14 h22 l5 -22 l5 22 h30 l4 -10 l4 10 h26"/>
+        <path class="d-track2" d="M14 120 h24 l5 -18 l5 18 h16 l4 -8 l4 8 h36 l5 -24 l5 24 h12"/>
+        <text x="16" y="56" class="d-small">CTCF</text>
+        <text x="16" y="98" class="d-small">H3K4me2</text>
+        <text x="79" y="160" class="d-label" text-anchor="middle">ChIP-seq tracks</text>
+        <text x="79" y="175" class="d-label" text-anchor="middle">of one window</text>
+
+        <line x1="160" y1="90" x2="190" y2="90" class="d-arrow" marker-end="url(#ah)"/>
+
+        <g class="d-box"><rect x="196" y="56" width="92" height="68" rx="6"/></g>
+        <text x="242" y="86" class="d-title" text-anchor="middle">Embedding</text>
+        <text x="242" y="104" class="d-small" text-anchor="middle">1D to 2D</text>
+
+        <line x1="294" y1="90" x2="324" y2="90" class="d-arrow" marker-end="url(#ah)"/>
+
+        <g class="d-box d-accent"><rect x="330" y="56" width="104" height="68" rx="6"/></g>
+        <text x="382" y="86" class="d-title" text-anchor="middle">Generator</text>
+        <text x="382" y="104" class="d-small" text-anchor="middle">convolutional</text>
+
+        <line x1="440" y1="90" x2="470" y2="90" class="d-arrow" marker-end="url(#ah)"/>
+
+        <!-- predicted matrix -->
+        <g class="d-box"><rect x="476" y="40" width="100" height="100" rx="6"/></g>
+        <g class="d-mat"><rect x="488" y="52" width="34" height="34"/><rect x="522" y="86" width="42" height="42"/><rect x="504" y="68" width="20" height="20"/></g>
+        <line x1="488" y1="52" x2="564" y2="128" class="d-diag"/>
+        <text x="526" y="160" class="d-label" text-anchor="middle">predicted</text>
+        <text x="526" y="175" class="d-label" text-anchor="middle">submatrix</text>
+
+        <!-- measured matrix -->
+        <g class="d-box"><rect x="476" y="190" width="100" height="56" rx="6"/></g>
+        <text x="526" y="215" class="d-label" text-anchor="middle">measured</text>
+        <text x="526" y="231" class="d-label" text-anchor="middle">submatrix</text>
+
+        <!-- discriminator -->
+        <g class="d-box d-accent"><rect x="618" y="100" width="140" height="68" rx="6"/></g>
+        <text x="688" y="130" class="d-title" text-anchor="middle">Discriminator</text>
+        <text x="688" y="148" class="d-small" text-anchor="middle">measured or generated?</text>
+
+        <path d="M582 90 H600 V122 H612" class="d-arrow" marker-end="url(#ah)"/>
+        <path d="M582 218 H600 V146 H612" class="d-arrow" marker-end="url(#ah)"/>
+
+        <!-- feedback -->
+        <path d="M688 94 V18 H382 V50" class="d-arrow d-dashed" marker-end="url(#ah)"/>
+        <text x="538" y="12" class="d-small" text-anchor="middle">training signal: adversarial loss plus distance to the measured matrix</text>
+      </svg>
+      <figcaption>
+        The idea of Hi-cGAN. The discriminator is only used during training. It also receives the input tracks, which makes the network conditional.
+      </figcaption>
+    </figure>
+
+    <figure>
+      <img src="{{ '/assets/img/hicgan-measured-vs-predicted.png' | relative_url }}" alt="Measured Hi-C matrix of GM12878 on chromosome 2 above the Hi-cGAN prediction from CTCF and H3K4me2 tracks, with the two input tracks below" loading="lazy">
+      <figcaption>
+        Measured Hi-C (GM12878, Rao et al. 2014, 10 kb, top) and the Hi-cGAN prediction from the CTCF and
+        H3K4me2 tracks shown below it, for 2 Mb of chromosome 2 that were not used for training.
+        The domains are recovered, fine detail inside them is smoother than in the measurement.
+      </figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>
+        Two input tracks capture most of what the factors can explain, and which ones are most informative
+        depends on the resolution: CTCF and the cohesin subunits at 5 to 10 kb, active histone marks at 25 kb.
+        The predicted maps describe structure at the scale of domains. Boundaries and loops called from them agree
+        less well with the measurement, and methods that read DNA sequence reach higher agreement. Applying a
+        model to a cell type it has not seen lowers the agreement moderately.
+      </p>
+    </div>
+    </article>
+
+    <article class="topic">
+      <h3>Clinical workflows</h3>
+      <p>Software for sequencing-based hematology diagnostics and the lab work around it, with the aim of replacing manual steps by reproducible and traceable ones.</p>
+
+      <h4 class="sub">SampleSync</h4>
+      <div class="prose">
+        <p>
+          Before a sample is sequenced, its DNA concentration has to be measured, because library
+          preparation needs a defined amount of input DNA. The standard instrument for this is the
+          Qubit, a benchtop fluorometer: a dye that only fluoresces when bound to DNA is added to a
+          small aliquot of the sample, and the measured fluorescence is converted into a concentration
+          using two or three standards. The instrument is accurate, but it knows nothing about the sample.
+          It shows a number per tube and exports a list of readings with timestamps, and which reading
+          belongs to which tube is usually written down by hand. With dozens of tubes per run this is
+          slow and a source of sample mix-ups.
+        </p>
+        <p>
+          <a href="https://github.com/MHH-Bioinformatics-Hematology/SampleSync">SampleSync</a> links the
+          readings to tube barcodes without any connection to the instrument. The operator scans a
+          tube's barcode, measures it, scans the next one, and so on. Afterwards the CSV export of the
+          instrument is loaded and the two timelines, scans and readings, are aligned by their
+          relative timing. The clocks of computer and instrument do not need to agree, the offset is
+          estimated. If the alternation of scan and measurement is broken, for example a tube was
+          scanned but never measured, the affected rows are flagged instead of being silently shifted.
+          The result is a table of barcode, concentration, operator, and status. SampleSync is a small
+          desktop application for Windows, Linux, and macOS that needs only Python.
+        </p>
+      </div>
+      <figure>
+        <img src="{{ '/assets/img/samplesync-window.png' | relative_url }}" alt="SampleSync window with a list of nine scanned barcodes above a results table where eight are matched to a concentration and one is flagged as invalid" loading="lazy">
+        <figcaption>
+          SampleSync with demo data. Nine tubes were scanned, eight readings were matched although the
+          instrument clock was about one hour off, and the tube that was scanned but not measured is flagged.
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="topic">
+      <h3>Agentic AI translations to bare-metal C++</h3>
+      <p>
+        Much widely used genomics software is written in Java or Python and was never optimized
+        for today's data volumes. These projects use agentic AI to translate such tools to
+        bare-metal C++ for performance: lower memory use and shorter run times, with results
+        validated against the original implementation.
+      </p>
+
+      <h4 class="sub">falcoAmadeus</h4>
+      <div class="prose">
+        <p>
+          Quality control is the first step of every sequencing analysis, and FastQC is the tool almost
+          everyone uses for it. It is written in Java and processes a file with a single thread.
+          falco is a faster C++ reimplementation with the same output.
+          <a href="https://github.com/joachimwolff/falcoAmadeus">falcoAmadeus</a> is a fork of falco
+          that reads and analyses FASTQ, gzipped FASTQ, SAM, and BAM files in parallel, and produces
+          the same result with any number of threads. It writes the FastQC text format that downstream tools
+          such as MultiQC expect, plus an interactive HTML report. It is available from Bioconda.
+        </p>
+      </div>
+      <figure>
+        <img src="{{ '/assets/img/falcoamadeus-report.png' | relative_url }}" alt="falcoAmadeus HTML report with a module list showing pass, warning and fail status and the basic statistics table" loading="lazy">
+        <figcaption>The falcoAmadeus report for a public dataset (SRA run SRR14777166), with the status of each quality module on the left.</figcaption>
+      </figure>
+      <figure>
+        <img src="{{ '/assets/img/falcoamadeus-benchmark.png' | relative_url }}" alt="Bar charts of run time and peak memory for FastQC, falco, falco2 and falcoAmadeus on a gzipped FASTQ file with 163 million reads" loading="lazy">
+        <figcaption>
+          Run time (log scale) and peak memory on a gzipped FASTQ file with 163 million reads:
+          314 s for FastQC, 232 s for falco, 45 s for falco2 and 17 s for falcoAmadeus with 16 threads.
+        </figcaption>
+      </figure>
+
+
+      <h4 class="sub">vardictcpp</h4>
+      <div class="prose">
+        <p>
+          VarDict is a variant caller that is widely used for targeted and deep sequencing, as in
+          leukemia diagnostics. The Java implementation needs a lot of memory, which limits how many
+          samples can run side by side.
+          <a href="https://github.com/MHH-Bioinformatics-Hematology/vardictcpp">vardictcpp</a> is a
+          C++ port that needs a fraction of the memory and runs several times faster. On five public whole-exome datasets the output is identical to VarDictJava 1.8.3, line by line.
+        </p>
+      </div>
+      <figure>
+        <img src="{{ '/assets/img/vardictcpp-benchmark.png' | relative_url }}" alt="Bar charts of wall-clock time and peak memory of vardictcpp and VarDictJava 1.8.3 on five whole-exome datasets with one and eight threads" loading="lazy">
+        <figcaption>
+          Run time and peak memory of vardictcpp and VarDictJava 1.8.3 (JDK 8) on five public whole-exome
+          SRA runs aligned to hg19, each with its own target regions, allele frequency threshold 0.01, same machine.
+        </figcaption>
+      </figure>
+      <div class="table-scroll">
+        <table class="stats">
+          <thead>
+            <tr><th rowspan="2">Dataset</th><th rowspan="2">Regions</th><th colspan="2">vardictcpp, 1 thread</th><th colspan="2">VarDictJava, 1 thread</th><th colspan="2">vardictcpp, 8 threads</th><th colspan="2">VarDictJava, 8 threads</th></tr>
+            <tr><th>s</th><th>GB</th><th>s</th><th>GB</th><th>s</th><th>GB</th><th>s</th><th>GB</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>SRR15006540</td><td>135k</td><td class="num">56.8</td><td class="num">0.06</td><td class="num">252.1</td><td class="num">32.5</td><td class="num">10.2</td><td class="num">0.30</td><td class="num">138.8</td><td class="num">33.4</td></tr>
+            <tr><td>SRR15006376</td><td>106k</td><td class="num">42.6</td><td class="num">0.07</td><td class="num">189.0</td><td class="num">21.5</td><td class="num">8.1</td><td class="num">0.32</td><td class="num">166.5</td><td class="num">33.6</td></tr>
+            <tr><td>SRR8657348</td><td>774k</td><td class="num">93.5</td><td class="num">0.09</td><td class="num">626.3</td><td class="num">32.7</td><td class="num">14.3</td><td class="num">0.24</td><td class="num">267.4</td><td class="num">33.3</td></tr>
+            <tr><td>SRR15006375</td><td>12k</td><td class="num">50.7</td><td class="num">0.05</td><td class="num">470.6</td><td class="num">5.5</td><td class="num">8.2</td><td class="num">0.28</td><td class="num">130.0</td><td class="num">12.8</td></tr>
+            <tr><td>SRR15006386</td><td>12k</td><td class="num">48.7</td><td class="num">0.05</td><td class="num">256.5</td><td class="num">6.5</td><td class="num">8.1</td><td class="num">0.21</td><td class="num">109.6</td><td class="num">12.7</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted caption-below">
+        Wall-clock time in seconds and peak memory in GB. As geometric mean over the five datasets vardictcpp is
+        5.8 times faster with 242 times less memory on one thread, and 16.2 times faster with 85 times less
+        memory on eight threads. With 16 threads each exome takes 6 to 8 seconds. The full benchmark, including
+        other Java versions and the memory-optimized VarDictJava fork, is in the
+        <a href="https://github.com/MHH-Bioinformatics-Hematology/vardictcpp#whole-exome-benchmark">repository</a>.
+      </p>
+    </article>
+
+    <article class="topic">
+      <h3>Galaxy</h3>
+      <p>
+        Contributions to the <a href="https://galaxyproject.org/">Galaxy</a> project: maintained tool
+        wrappers and training material of the Galaxy Training Network. A local Galaxy server at MHH
+        gives researchers and clinicians web-based access to reproducible analysis workflows.
+      </p>
+      <ul class="cards">
+        <li>
+          <h4><a href="https://github.com/MHH-Bioinformatics-Hematology/galaxytools">galaxytools</a></h4>
+          <p>Galaxy tool wrappers from MHH hematology, published to the Galaxy ToolShed.</p>
+        </li>
+        <li>
+          <h4>Wrappers in community repositories</h4>
+          <p>
+            <a href="https://github.com/galaxyproject/tools-iuc/tree/main/tools/filt3r">FiLT3r</a> in tools-iuc,
+            and the Galaxy wrappers of HiCExplorer, scHiCExplorer, and pyGenomeTracks.
+          </p>
+        </li>
+        <li>
+          <h4>Training material</h4>
+          <p>
+            Galaxy Training Network tutorials:
+            <a href="https://training.galaxyproject.org/training-material/topics/epigenetics/tutorials/hicexplorer/tutorial.html">Hi-C analysis with HiCExplorer</a>,
+            <a href="https://training.galaxyproject.org/training-material/topics/sequence-analysis/tutorials/mapping/tutorial.html">Mapping</a>,
+            <a href="https://training.galaxyproject.org/training-material/topics/epigenetics/tutorials/tal1-binding-site-identification/tutorial.html">TAL1 binding sites (ChIP-seq)</a>.
+            All contributions: <a href="https://training.galaxyproject.org/training-material/hall-of-fame/joachimwolff/">GTN profile</a>.
+          </p>
+        </li>
+      </ul>
+    </article>
+  </div>
+</section>

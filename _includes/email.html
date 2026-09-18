@@ -1,0 +1,1 @@
+<span class="email" data-a="{{ site.email_user_reversed }}" data-b="{{ site.email_domain_reversed }}">{{ site.email_user_reversed | split: "" | reverse | join: "" | replace: ".", " (dot) " }} (at) {{ site.email_domain_reversed | split: "" | reverse | join: "" | replace: ".", " (dot) " }}</span>

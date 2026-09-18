@@ -1,0 +1,44 @@
+---
+layout: default
+---
+<section class="page">
+  <div class="wrap">
+    <p class="crumb"><a href="{{ '/teaching/' | relative_url }}">Teaching</a> / {{ page.term }}</p>
+    <h1 class="page-title">{{ page.title }}</h1>
+    <dl class="facts">
+      <dt>Term</dt><dd>{{ page.term }}{% if page.date_text %} ({{ page.date_text }}){% endif %}</dd>
+      <dt>Program</dt><dd>{{ page.program }}</dd>
+      {% if page.topics %}<dt>Topics</dt><dd>{{ page.topics | join: ", " }}</dd>{% endif %}
+    </dl>
+
+    <div class="prose">
+{{ content }}
+    </div>
+
+    <h2>Course material</h2>
+    {% assign count = 0 %}
+    {% if page.modules %}
+    {% assign count = page.modules | size %}
+    <p class="muted">The course uses the following slides and hands-on tutorials of the <a href="https://training.galaxyproject.org/">Galaxy Training Network</a>.</p>
+    <ol class="program">
+    {% for key in page.modules %}{% assign m = site.data.modules[key] %}
+      <li>
+        <span class="program-title">{{ m.title }}</span>
+        <span class="program-links">{% if m.slides %}<a href="{{ m.slides }}">Slides</a>{% endif %}{% if m.slides and m.handson %} &middot; {% endif %}{% if m.handson %}<a href="{{ m.handson }}">Hands-on</a>{% endif %}</span>
+      </li>
+    {% endfor %}
+    </ol>
+    {% endif %}
+
+    {% assign prefix = "/materials/" | append: page.slug | append: "/" %}
+    <ul class="files">
+    {% for f in site.static_files %}{% if f.path contains prefix %}{% assign count = count | plus: 1 %}
+      <li><a href="{{ f.path | relative_url }}">{{ f.path | remove_first: prefix }}</a></li>
+    {% endif %}{% endfor %}
+    {% for l in page.links %}{% assign count = count | plus: 1 %}
+      <li><a href="{{ l.url }}">{{ l.title }}</a></li>
+    {% endfor %}
+    </ul>
+    {% if count == 0 %}<p class="muted">No material published yet.</p>{% endif %}
+  </div>
+</section>

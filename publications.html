@@ -1,0 +1,22 @@
+---
+title: Publications
+permalink: /publications/
+---
+<section class="page">
+  <div class="wrap">
+    <h1 class="page-title">Publications</h1>
+    <p>
+      Publications of Joachim Wolff. Full and current lists:
+      <a href="https://scholar.google.com/citations?user=MPA2i8QAAAAJ&amp;hl=en&amp;sortby=pubdate">Google Scholar</a>
+      &middot; <a href="https://orcid.org/0000-0001-9985-955X">ORCID 0000-0001-9985-955X</a>
+    </p>
+    <ol class="pubs">
+    {% for p in site.data.publications %}
+      <li>
+        <span class="year">{{ p.year }}</span>
+        <span>{{ p.text }}{% if p.doi %} <a href="https://doi.org/{{ p.doi }}">doi:{{ p.doi }}</a>{% endif %}{% if p.file %} <a href="{{ p.file | relative_url }}">PDF</a>{% if p.url %},{% endif %}{% endif %}{% if p.url %} <a href="{{ p.url }}">{{ p.url_label | default: p.url }}</a>{% endif %}</span>
+      </li>
+    {% endfor %}
+    </ol>
+  </div>
+</section>

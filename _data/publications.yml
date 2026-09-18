@@ -1,0 +1,44 @@
+# One entry per publication, newest first. 'text' may contain <b> and <i>.
+- year: 2026
+  text: 'Krauth R, Kumar A, <b>Wolff J</b>. Hi-cGAN: Prediction of Hi-C interaction matrices with conditional generative adversarial networks. <i>bioRxiv</i> (preprint).'
+  doi: "10.64898/2026.08.30.748103"
+- year: 2023
+  text: 'Kessler S, Minoux M, Joshi O, Ben Zouari Y, Ducret S, Ross F, Vilain N, Salvi A, <b>Wolff J</b>, Kohler H, Stadler MB, Rijli FM. A multiple super-enhancer region establishes inter-TAD interactions and controls Hoxa function in cranial neural crest. <i>Nature Communications</i>.'
+  doi: "10.1038/s41467-023-38953-0"
+- year: 2022
+  text: '<b>Wolff J</b>, Backofen R, Grüning B. Loop detection using Hi-C data with HiCExplorer. <i>GigaScience</i>.'
+  doi: "10.1093/gigascience/giac061"
+- year: 2022
+  text: '<b>Wolff J</b>. Approaches to analysis of chromosome conformation capture data. Doctoral thesis, Albert-Ludwigs-Universität Freiburg.'
+  file: /assets/theses/Wolff_2022_doctoral_thesis.pdf
+  url: "https://freidok.uni-freiburg.de/data/224705"
+  url_label: "original record at FreiDok, University of Freiburg"
+- year: 2021
+  text: '<b>Wolff J</b>, Backofen R, Grüning B. Robust and efficient single-cell Hi-C clustering with approximate k-nearest neighbor graphs. <i>Bioinformatics</i>.'
+  doi: "10.1093/bioinformatics/btab394"
+- year: 2021
+  text: '<b>Wolff J</b>, Abdennur N, Backofen R, Grüning B. Scool: a new data storage format for single-cell Hi-C data. <i>Bioinformatics</i>.'
+  doi: "10.1093/bioinformatics/btaa924"
+- year: 2021
+  text: 'Lopez-Delisle L, Rabbani L, <b>Wolff J</b>, Bhardwaj V, Backofen R, Grüning B, Ramírez F, Manke T. pyGenomeTracks: reproducible plots for multivariate genomic datasets. <i>Bioinformatics</i>.'
+  doi: "10.1093/bioinformatics/btaa692"
+- year: 2020
+  text: '<b>Wolff J</b>, Rabbani L, Gilsbach R, Richard G, Manke T, Backofen R, Grüning BA. Galaxy HiCExplorer 3: a web server for reproducible Hi-C, capture Hi-C and single-cell Hi-C data analysis, quality control and visualization. <i>Nucleic Acids Research</i>.'
+  doi: "10.1093/nar/gkaa220"
+- year: 2018
+  text: '<b>Wolff J</b>, Bhardwaj V, Nothjunge S, Richard G, Renschler G, Gilsbach R, Manke T, Backofen R, Ramírez F, Grüning BA. Galaxy HiCExplorer: a web server for reproducible Hi-C data analysis, quality control and visualization. <i>Nucleic Acids Research</i>.'
+  doi: "10.1093/nar/gky504"
+- year: 2018
+  text: 'Batut B, Hiltemann S, Bagnacani A, et al. (including <b>Wolff J</b>). Community-driven data analysis training for biology. <i>Cell Systems</i>.'
+  doi: "10.1016/j.cels.2018.05.012"
+- year: 2018
+  text: 'Raden M, Ali SM, Alkhnbashi OS, et al. (including <b>Wolff J</b>). Freiburg RNA tools: a central online resource for RNA-focused research and teaching. <i>Nucleic Acids Research</i>.'
+  doi: "10.1093/nar/gky329"
+- year: 2018
+  text: 'Grüning B, Dale R, Sjödin A, et al. (The Bioconda Team, including <b>Wolff J</b>). Bioconda: sustainable and comprehensive software distribution for the life sciences. <i>Nature Methods</i>.'
+  doi: "10.1038/s41592-018-0046-7"
+- year: 2016
+  text: '<b>Wolff J</b>. Approximate nearest neighbor query methods for large-scale structured datasets. Master thesis, Albert-Ludwigs-Universität Freiburg.'
+  file: /assets/theses/Wolff_2016_master_thesis.pdf
+  url: "https://www.bioinf.uni-freiburg.de/subpage/projects/completed.html"
+  url_label: "Bioinformatics Group Freiburg"

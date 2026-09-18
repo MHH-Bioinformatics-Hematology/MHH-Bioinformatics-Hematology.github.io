@@ -1,0 +1,36 @@
+# Building blocks of the Galaxy courses, linked to the Galaxy Training Network (GTN).
+# A course lists the blocks it uses under "modules:" in its header, in teaching order.
+galaxy-intro:
+  title: Introduction to Galaxy
+  slides: https://training.galaxyproject.org/training-material/topics/introduction/tutorials/galaxy-intro-short/slides.html
+  handson: https://training.galaxyproject.org/training-material/topics/introduction/tutorials/galaxy-intro-short/tutorial.html
+qc:
+  title: Quality control
+  slides: https://training.galaxyproject.org/training-material/topics/sequence-analysis/tutorials/quality-control/slides.html
+  handson: https://training.galaxyproject.org/training-material/topics/sequence-analysis/tutorials/quality-control/tutorial.html
+mapping:
+  title: Mapping
+  slides: https://training.galaxyproject.org/training-material/topics/sequence-analysis/tutorials/mapping/slides.html
+  handson: https://training.galaxyproject.org/training-material/topics/sequence-analysis/tutorials/mapping/tutorial.html
+rnaseq:
+  title: RNA-seq
+  slides: https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/introduction/slides.html
+  handson: https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/ref-based/tutorial.html
+chipseq:
+  title: ChIP-seq
+  slides: https://training.galaxyproject.org/training-material/topics/epigenetics/tutorials/introduction-chip-seq/slides.html
+  handson: https://training.galaxyproject.org/training-material/topics/epigenetics/tutorials/formation_of_super-structures_on_xi/tutorial.html
+methylation:
+  title: DNA methylation
+  slides: https://training.galaxyproject.org/training-material/topics/epigenetics/tutorials/introduction-dna-methylation/slides.html
+  handson: https://training.galaxyproject.org/training-material/topics/epigenetics/tutorials/methylation-seq/tutorial.html
+scrna-intro:
+  title: Introduction to single-cell RNA-seq
+  slides: https://training.galaxyproject.org/training-material/topics/single-cell/tutorials/scrna-intro/slides.html
+scrna-scanpy:
+  title: Clustering 3K PBMCs with Scanpy
+  slides: https://training.galaxyproject.org/training-material/topics/single-cell/tutorials/scrna-scanpy-pbmc3k/slides.html
+  handson: https://training.galaxyproject.org/training-material/topics/single-cell/tutorials/scrna-scanpy-pbmc3k/tutorial.html
+scrna-seurat:
+  title: Clustering 3K PBMCs with Seurat
+  handson: https://training.galaxyproject.org/training-material/topics/single-cell/tutorials/scrna-seurat-pbmc3k/tutorial.html

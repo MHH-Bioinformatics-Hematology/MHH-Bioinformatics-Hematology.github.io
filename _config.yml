@@ -1,0 +1,23 @@
+title: MHH Bioinformatics Hematology
+description: Bioinformatics in the Heidel lab at Hannover Medical School
+url: https://mhh-bioinformatics-hematology.github.io
+baseurl: ""
+
+# Contact address, stored reversed so that address harvesters do not find it in the
+# repository or the page source. It is put together in the browser (see _layouts/default.html).
+email_user_reversed: "mihcaoj.fflow"
+email_domain_reversed: "ed.revonnah-hm"
+
+# Every file in _courses/ becomes a page under /teaching/<file-name>/
+collections:
+  courses:
+    output: true
+    permalink: /teaching/:name/
+
+defaults:
+  - scope: { path: "", type: courses }
+    values: { layout: course }
+  - scope: { path: "" }
+    values: { layout: default }
+
+exclude: [README.md, tools]

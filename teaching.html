@@ -1,0 +1,32 @@
+---
+title: Teaching
+permalink: /teaching/
+---
+<section class="page">
+  <div class="wrap">
+    <h1 class="page-title">Teaching</h1>
+    <p>
+      The Galaxy and Python courses and the machine learning lectures are part of the PhD programs of the
+      <a href="https://www.mhh.de/hbrs">Hannover Biomedical Research School (HBRS)</a>,
+      the graduate school of MHH. In addition, there are lectures in the MHH master's program Biomedical Data Science.
+      Each course has its own page with the course material.
+    </p>
+
+    {% assign sorted = site.courses | sort: "term_order" | reverse %}
+    {% assign terms = sorted | group_by: "term" %}
+    {% for t in terms %}
+    <div class="term">
+      <h3>{{ t.name }}{% if t.items[0].upcoming %} <span class="tag">upcoming</span>{% endif %}</h3>
+      <ul>
+        {% assign items = t.items | sort: "order" %}
+        {% for c in items %}
+        <li>
+          <a href="{{ c.url | relative_url }}"><strong>{{ c.title }}</strong></a>{% if c.date_text %} ({{ c.date_text }}){% endif %}<br>
+          <span class="muted">{{ c.program }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+</section>
