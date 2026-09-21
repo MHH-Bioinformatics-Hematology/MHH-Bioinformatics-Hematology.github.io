@@ -17,12 +17,11 @@ published: false
         result is still a manual inspection of curves and traces in the vendor software.
       </p>
       <p>
-        All tools follow one design. The features come only from the raw instrument file. A trained
+        All tools follow one design. The features are computed from the raw instrument file. A trained
         model makes the call and returns a probability. A rule-based gate applies the run-acceptance
         criteria of the laboratory and defers every uncertain sample to a person, with the reason.
-        Everything that is specific to an assay, such as targets, reference genes, control names and
-        thresholds, is a configuration file and not part of the code, so each tool can be trained
-        for other assays. The tools prepare the call. A laboratory scientist reviews and approves
+        Targets, reference genes, control names and thresholds are defined in a configuration file,
+        so each tool can be trained for other assays. A laboratory scientist reviews and approves
         every run.
       </p>
     </div>
