@@ -273,7 +273,7 @@ permalink: /research/
 
     <article class="topic">
       <h3>Clinical workflows</h3>
-      <p>Software for sequencing-based hematology diagnostics and the lab work around it, with the aim of replacing manual steps by reproducible and traceable ones.</p>
+      <p>Software for molecular hematology diagnostics and the lab work around it, with the aim of replacing manual steps by reproducible and traceable ones.</p>
 
       <h4 class="sub">SampleSync</h4>
       <div class="prose">
@@ -306,6 +306,37 @@ permalink: /research/
           instrument clock was about one hour off, and the tube that was scanned but not measured is flagged.
         </figcaption>
       </figure>
+
+      <h4 class="sub">LeukoPredict</h4>
+      <div class="prose">
+        <p>
+          In molecular leukemia diagnostics, the step from a finished instrument run to the reported
+          result is a manual inspection of curves and traces in the vendor software.
+          <a href="https://mhh-bioinformatics-hematology.github.io/leukopredict/">LeukoPredict</a> is a
+          set of tools that make this call from the raw data file of the instrument. The features
+          are computed from the raw file, a trained model returns the call with a probability, and a
+          rule-based gate applies the run-acceptance criteria of the laboratory and defers every
+          uncertain sample to a person, with the reason. A laboratory scientist reviews and approves
+          every run. Targets, reference genes, control names and thresholds are defined in a
+          configuration file, so each tool can be trained for other assays. The tools run on the
+          command line and in Galaxy, where every call is recorded with its input, tool version and
+          parameters.
+        </p>
+        <ul>
+          <li>
+            <b>qpcrpredict</b> reads real-time PCR run files (Applied Biosystems <code>.eds</code> and
+            the vendor-neutral RDML format) and predicts the positive or negative call of the assay.
+            Its packaged model covers molecular measurable residual disease in acute myeloid leukemia:
+            mutated <i>NPM1</i>, <i>RUNX1::RUNX1T1</i>, <i>CBFB::MYH11</i>, <i>PML::RARA</i> and
+            <i>BCR::ABL1</i>, each quantified against <i>ABL1</i>.
+          </li>
+          <li>
+            <b>cepredict</b> (in preparation) reads capillary electrophoresis traces
+            (<code>.fsa</code>) from fragment analysis and calls mutations and fusion transcripts at
+            diagnosis.
+          </li>
+        </ul>
+      </div>
     </article>
 
     <article class="topic">
