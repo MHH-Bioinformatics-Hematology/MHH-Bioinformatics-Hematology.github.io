@@ -16,7 +16,7 @@ permalink: /teaching/
     {% assign terms = sorted | group_by: "term" %}
     {% for t in terms %}
     <div class="term">
-      <h3>{{ t.name }}{% if t.items[0].upcoming %} <span class="tag">upcoming</span>{% endif %}</h3>
+      <h3>{{ t.name }}{% if t.items[0].upcoming %} <span class="tag">current</span>{% endif %}</h3>
       <ul>
         {% assign items = t.items | sort: "order" %}
         {% for c in items %}
