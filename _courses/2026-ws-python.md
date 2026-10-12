@@ -18,8 +18,8 @@ weekly practical session.
 
 | | First date | Time | Room |
 |---|---|---|---|
-| Lecture | Tuesday, 2026-10-13 | Tuesdays, 17:00 to 19:00 (5 pm c.t.) | Theoretisches Institut 2 (J6), seminar room 70 |
-| Practical session | Friday, 2026-10-16 | Fridays, 16:00 (4 pm c.t.) | Theoretisches Institut 2 (J6), multimedia room |
+| Lecture | Tuesday, 2026-10-13 | Tuesdays, 17:00 c.t. to 19:00 | Theoretisches Institut 2 (J6), seminar room 70 |
+| Practical session | Friday, 2026-10-16 | Fridays, 16:00 c.t. | Theoretisches Institut 2 (J6), multimedia room |
 
 ## Material
 
